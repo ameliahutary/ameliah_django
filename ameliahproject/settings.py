@@ -80,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ameliahproject.wsgi.application'
 
-AUTH_USER_MODEL = 'stardlune_app.Account'
+
 
 
 # Database
@@ -90,7 +90,7 @@ AUTH_USER_MODEL = 'stardlune_app.Account'
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'stardlune',
-#         'USER' : 'omarreda',
+#         'USER' : 'ameliah',
 #         'PASSWORD' : os.environ.get('DB_PASS'),
 #         'HOST' : 'e-shop.cmesgttozqee.us-west-2.rds.amazonaws.com',
 #         'PORT' : '5432',
