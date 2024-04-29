@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-5b2c1zdi@@1e3g-^)dz5ae$15ykc^)rt^)nr*ww^b-6!llb!6v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,7 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'stardlune_app',
+    'shop',
+    'cart',
+    'orders',
+
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +62,7 @@ ROOT_URLCONF = 'ameliahproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,6 +70,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'shop.context_processors.category_list',
+                'cart.context_processors.counter',
             ],
         },
     },
@@ -71,9 +80,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ameliahproject.wsgi.application'
 
+AUTH_USER_MODEL = 'accounts.Account'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'stardlune',
+#         'USER' : 'omarreda',
+#         'PASSWORD' : os.environ.get('DB_PASS'),
+#         'HOST' : 'e-shop.cmesgttozqee.us-west-2.rds.amazonaws.com',
+#         'PORT' : '5432',
+#     }
+# }
 
 DATABASES = {
     'default': {
@@ -124,5 +145,41 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'core/static'
+]
+
+# MEDIA
 MEDIA_URL = '/media/'
-MEDIA_ROOT= os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
+
+
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT= 587 
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# AWS_QUERYSTRING_AUTH = False
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+
+# AWS_STORAGE_BUCKET_NAME = 'e--shop-bucket'
+
+if os.getcwd() == '/app' :
+    DEBUG = False
