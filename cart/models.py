@@ -2,7 +2,7 @@ from django.db import models
 
 from shop.models import Product
 from shop.models import Variation
-from accounts.models import Account
+from stardlune_app.models import Account
 
 class Cart(models.Model):
     cart_id = models.CharField(max_length=250, blank=True)
