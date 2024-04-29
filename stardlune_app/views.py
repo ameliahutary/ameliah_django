@@ -1,5 +1,4 @@
 import requests
-
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib import messages, auth   
 from django.contrib.auth.decorators import login_required
@@ -51,7 +50,7 @@ def register(request):
             # USER ACTIVATION
             current_site = get_current_site(request)
             subject = 'Please activate your account'
-            message = render_to_string('shop/accounts/email_activate/account_verification_email.html', {
+            message = render_to_string('shop/stardlune_app/email_activate/account_verification_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -67,7 +66,7 @@ def register(request):
             
             # auth.login(request, user)
             # messages.success(request, 'You Loged in')
-            # return redirect('accounts:dashboard')
+            # return redirect('stardlune_app:dashboard')
 
 
     else : # request == GET
@@ -77,7 +76,7 @@ def register(request):
         'forms': form,
     }
 
-    return render(request, 'shop/accounts/register.html', context)
+    return render(request, 'shop/stardlune_app/register.html', context)
 
 def login(request):
     if request.method == "POST":
@@ -135,19 +134,19 @@ def login(request):
                     nextPage = params['next']
                     return redirect(nextPage)
             except:
-                return redirect('accounts:dashboard')
-            return redirect('accounts:dashboard')
+                return redirect('stardlune_app:dashboard')
+            return redirect('stardlune_app:dashboard')
         else:
             messages.error(request, 'Your email or password is wrong!')
-            return redirect('accounts:login')
-    return render(request, 'shop/accounts/login.html')
+            return redirect('stardlune_app:login')
+    return render(request, 'shop/stardlune_app/login.html')
 
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def logout(request):
     auth.logout(request)
     messages.success(request, "You've successfully logged out . Come back soon!")
-    return redirect('accounts:login')
+    return redirect('stardlune_app:login')
 
 
 def activate(request, uidb64, token):
@@ -161,12 +160,12 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         messages.success(request, "Your account is activated, log in and let's go.")
-        return redirect('accounts:login')
+        return redirect('stardlune_app:login')
     else:
         messages.error(request, "Invalid activation link, Try again!")
-        return redirect('accounts:register')
+        return redirect('stardlune_app:register')
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
     profile = UserProfile.objects.get(user_id=request.user.id)
@@ -177,11 +176,11 @@ def dashboard(request):
         'profile':profile,
         
     }
-    return render(request, 'shop/accounts/dashboard/dashboard.html', context)
+    return render(request, 'shop/stardlune_app/dashboard/dashboard.html', context)
 
 
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def my_orders(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
     orders_count = orders.count()
@@ -190,10 +189,10 @@ def my_orders(request):
         'orders':orders,
         'orders_count':orders_count,
     }
-    return render(request, 'shop/accounts/dashboard/my_orders.html', context)
+    return render(request, 'shop/stardlune_app/dashboard/my_orders.html', context)
 
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def edit_profile(request):
     userprofile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
@@ -203,7 +202,7 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile has been updated.')
-            return redirect('accounts:edit_profile')
+            return redirect('stardlune_app:edit_profile')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)
@@ -212,10 +211,10 @@ def edit_profile(request):
         'profile_form': profile_form,
         'userprofile': userprofile,
     }
-    return render(request, 'shop/accounts/dashboard/edit_profile.html', context)
+    return render(request, 'shop/stardlune_app/dashboard/edit_profile.html', context)
 
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def change_password(request):
     if request.method == 'POST':
         old_password = request.POST['old_password']
@@ -231,17 +230,17 @@ def change_password(request):
                 user.save()
                 auth.login(request, user)
                 messages.success(request, 'Password Updated successfully.')
-                return redirect('accounts:change_password')
+                return redirect('stardlune_app:change_password')
             else:
                 messages.error(request, 'Old password is wrong')
-                return redirect('accounts:change_password')
+                return redirect('stardlune_app:change_password')
         else:
             messages.error(request, 'Password does not match')
-            return redirect('accounts:change_password')
-    return render(request, 'shop/accounts/dashboard/change_password.html')
+            return redirect('stardlune_app:change_password')
+    return render(request, 'shop/stardlune_app/dashboard/change_password.html')
 
 
-@login_required(login_url = 'accounts:login')
+@login_required(login_url = 'stardlune_app:login')
 def order_detail(request,order_id):
     order_detail = OrderProduct.objects.filter(order__order_number=order_id)
     order = Order.objects.get(order_number=order_id)
@@ -255,7 +254,7 @@ def order_detail(request,order_id):
         'order': order,
         'subtotal': subtotal,
     }
-    return render(request, 'shop/accounts/dashboard/order_detail.html', context)
+    return render(request, 'shop/stardlune_app/dashboard/order_detail.html', context)
 
 
 def forget_password(request):
@@ -267,7 +266,7 @@ def forget_password(request):
             # SEND EMAIL
             current_site = get_current_site(request)
             subject = 'Reset Your Password'
-            message = render_to_string('shop/accounts/forget_password/send_resetpassword_email.html', {
+            message = render_to_string('shop/stardlune_app/forget_password/send_resetpassword_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -283,9 +282,9 @@ def forget_password(request):
             return redirect('/account/forget_password/?command=resetpassword&email='+email)
         else: 
             messages.error(request, 'This email does not exist!')
-            return redirect('accounts:forget_password')
+            return redirect('stardlune_app:forget_password')
 
-    return render(request, 'shop/accounts/forget_password/forget_password.html') 
+    return render(request, 'shop/stardlune_app/forget_password/forget_password.html') 
 
 
 def resetpassword_validate(request, uidb64, token):
@@ -297,10 +296,10 @@ def resetpassword_validate(request, uidb64, token):
 
     if user is not None and account_activation_token.check_token(user, token):
         request.session['uid'] = uid
-        return redirect('accounts:reset_password')
+        return redirect('stardlune_app:reset_password')
     else:
         messages.error(request, 'This is link has been expired !')
-        return redirect('accounts:forget_password')
+        return redirect('stardlune_app:forget_password')
 
 
 
@@ -316,13 +315,13 @@ def reset_password(request):
                 user.set_password(password)
                 user.save()
                 messages.success(request, 'Password Reset Successful')
-                return redirect('accounts:login')
+                return redirect('stardlune_app:login')
             else:
                 messages.error(request, "Password does not match!")
-                return redirect('accounts:reset_password')
+                return redirect('stardlune_app:reset_password')
         except Account.DoesNotExist:
             messages.error(request, "Please enter your email address here first! ")
-            return redirect('accounts:forget_password')
+            return redirect('stardlune_app:forget_password')
 
     else:
-        return render(request, 'shop/accounts/forget_password/reset_password.html')
+        return render(request, 'shop/stardlune_app/forget_password/reset_password.html')

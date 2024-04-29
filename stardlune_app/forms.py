@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account ,UserProfile
+from .models import Account , UserProfile
 
 class RegisterationFrom(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
