@@ -80,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ameliahproject.wsgi.application'
 
-
+AUTH_USER_MODEL = 'stardlune_app.Account'
 
 
 # Database
