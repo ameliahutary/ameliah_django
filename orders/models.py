@@ -1,5 +1,5 @@
 from django.db import models
-from stardlune_app.models import Account
+from accounts.models import Account
 from shop.models import Product, Variation
 
 

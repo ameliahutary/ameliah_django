@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'stardlune_app',
+    'accounts',
     'shop',
     'cart',
     'orders',
@@ -80,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ameliahproject.wsgi.application'
 
-AUTH_USER_MODEL = 'stardlune_app.Account'
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
@@ -89,7 +89,7 @@ AUTH_USER_MODEL = 'stardlune_app.Account'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'stardlune',
+#         'NAME': 'accounts',
 #         'USER' : 'ameliah',
 #         'PASSWORD' : os.environ.get('DB_PASS'),
 #         'HOST' : 'e-shop.cmesgttozqee.us-west-2.rds.amazonaws.com',
