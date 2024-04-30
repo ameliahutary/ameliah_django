@@ -167,17 +167,20 @@ def activate(request, uidb64, token):
 
 @login_required(login_url = 'stardlune_app:login')
 def dashboard(request):
+    try:
+        profile = UserProfile.objects.get(user_id=request.user.id)
+    except UserProfile.DoesNotExist:
+        # Buat profil pengguna jika belum ada
+        profile = UserProfile.objects.create(user_id=request.user.id)
+
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
-    profile = UserProfile.objects.get(user_id=request.user.id)
-    
     orders_count = orders.count()
+    
     context = {
-        'orders_count':orders_count,
-        'profile':profile,
-        
+        'orders_count': orders_count,
+        'profile': profile,
     }
     return render(request, 'shop/stardlune_app/dashboard/dashboard.html', context)
-
 
 
 @login_required(login_url = 'stardlune_app:login')
