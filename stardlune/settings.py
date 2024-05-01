@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os 
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-5b2c1zdi@@1e3g-^)dz5ae$15ykc^)rt^)nr*ww^b-6!llb!6v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,12 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
-    'shop',
-    'cart',
-    'orders',
-
-    'storages',
+    
+    # Custom Apps
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -56,12 +53,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ameliahproject.urls'
+ROOT_URLCONF = 'stardlune.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [cs.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,17 +66,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                'shop.context_processors.category_list',
-                'cart.context_processors.counter',
+            
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'ameliahproject.wsgi.application'
+WSGI_APPLICATION = 'stardlune.wsgi.application'
 
-AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
