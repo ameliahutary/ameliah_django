@@ -1,5 +1,5 @@
 """
-WSGI config for ameliahproject project.
+WSGI config for stardlune project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
