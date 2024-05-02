@@ -5,51 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merch Kpop</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <style>
-        /* CSS Inline */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 24px;
-        }
-        .social-media {
-            display: flex;
-            align-items: center;
-        }
-        .social-media a {
-            color: #fff;
-            margin-right: 10px;
-        }
-        .navbar {
-            background-color: #f4f4f4;
-            padding: 10px 0;
-            text-align: center;
-        }
-        .navbar a {
-            color: #333;
-            text-decoration: none;
-            padding: 10px 20px;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
-        }
-        .cart {
-            margin-right: 20px;
-        }
-        .search-bar {
-            margin-right: 20px;
-        }
+        /* Custom CSS */
+        /* Add your custom styles here */
     </style>
 </head>
 <body>
@@ -60,19 +20,76 @@
             <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
         </div>
         <div class="logo">Your Logo</div>
-        <div>
-            <input type="text" class="search-bar" placeholder="Search...">
-            <button class="cart">Cart</button>
-            <a href="#">Login</a>
+        <div class="header-actions">
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <a href="#" class="btn btn-primary ml-2">Cart</a>
+            <a href="#" class="btn btn-outline-light ml-2">Login</a>
         </div>
     </header>
-    <div class="navbar">
-        <a href="#">Home</a>
-        <a href="#">About Us</a>
-        <a href="#">Category</a>
-        <a href="#">Blog</a>
-        <a href="#">Contact Us</a>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Category</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="jumbotron">
+                    <h1 class="display-4">Welcome to Merch Kpop</h1>
+                    <p class="lead">Explore our wide range of Kpop merchandise.</p>
+                    <hr class="my-4">
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Shop Now</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Advertisement or additional content -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Advertisement</h5>
+                        <p class="card-text">Some promotional content or advertisement can be placed here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display products -->
+        <div class="row mt-4">
+            <div class="col">
+                <h2>Featured Products</h2>
+                <!-- Product cards or grid -->
+                <!-- Add your product display here -->
+            </div>
+        </div>
     </div>
-    <!-- Content goes here -->
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="jquery/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
