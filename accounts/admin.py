@@ -5,7 +5,7 @@ from .models import Product, Order, OrderItem, UserProfile
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'stock')
+    list_display = ('name', 'price', 'stock', 'category')
     search_fields = ('name',)
     list_filter = ('category',)
 
@@ -17,8 +17,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('product', 'quantity', 'date_added')
-    search_fields = ('product__name',)
+    list_display = ('order', 'product', 'quantity', 'date_added')
+    search_fields = ('order__id', 'product__name',)
     list_filter = ('date_added',)
 
 @admin.register(UserProfile)
