@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merch Kpop</title>
+    <style>
+        /* CSS Inline */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+        }
+        .social-media {
+            display: flex;
+            align-items: center;
+        }
+        .social-media a {
+            color: #fff;
+            margin-right: 10px;
+        }
+        .navbar {
+            background-color: #f4f4f4;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .navbar a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+        }
+        .cart {
+            margin-right: 20px;
+        }
+        .search-bar {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="social-media">
+            <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+            <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
+            <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+        </div>
+        <div class="logo">Your Logo</div>
+        <div>
+            <input type="text" class="search-bar" placeholder="Search...">
+            <button class="cart">Cart</button>
+            <a href="#">Login</a>
+        </div>
+    </header>
+    <div class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About Us</a>
+        <a href="#">Category</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact Us</a>
+    </div>
+    <!-- Content goes here -->
+</body>
+</html>
