@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stardlune - Products</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Navbar */
+        .navbar {
+            background-color: #343a40 !important; /* Warna latar belakang navbar */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important; /* Warna teks navbar */
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Warna teks link navbar */
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important; /* Warna teks link navbar saat hover */
+        }
+        .nav-item.active .nav-link {
+            border-bottom: 3px solid #007bff; /* Warna garis bawah yang dipilih (biru) */
+        }
+
+        .profile-icon {
+            width: 30px; /* Sesuaikan ukuran gambar */
+            height: auto;
+        }
+
+        /* Cart Items */
+        .cart-item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #343a40;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            width: 100%;
+            bottom: 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Stardlune</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products/">Products</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/cart/">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login/">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile/">
+                            <img src="https://divedigital.id/wp-content/uploads/2021/10/1-min.png" alt="Profile" class="profile-icon">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <div class="container mt-4">
+        <h2>Shopping Cart</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Cart Items -->
+                {% for item in items %}
+                <div class="cart-item">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <img src="{{ item.product.image.url }}" alt="Product" class="cart-img">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>{{ item.product.name }}</h4>
+                            <p>{{ item.product.description }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p>${{ item.product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- End Cart Items -->
+            </div>
+            <div class="col-md-4">
+                <!-- Cart Summary -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Cart Summary</h5>
+                        <p>Total Items: {{ items.count }}</p>
+                        <p>Total Price: ${{ total_price }}</p>
+                        <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+                    </div>
+                </div>
+                <!-- End Cart Summary -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Stardlune. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

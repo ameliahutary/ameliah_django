@@ -13,12 +13,22 @@ def product_detail(request, product_id):
     product = Product.objects.get(id=product_id)
     return render(request, 'product_detail.html', {'product': product})
 
+
 @login_required
 def cart(request):
-    user_profile = UserProfile.objects.get(user=request.user)
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        user_profile = None
+
     order, created = Order.objects.get_or_create(user=request.user, status='Pending')
-    items = order.orderitem_set.all()
-    return render(request, 'cart.html', {'items': items, 'user_profile': user_profile})
+    items = OrderItem.objects.filter(order=order)
+
+    # Ambil produk yang terkait dengan setiap OrderItem
+    products = [item.product for item in items]
+
+    return render(request, 'cart.html', {'items': items, 'products': products, 'profile': user_profile})
+
 
 @login_required
 def checkout(request):
