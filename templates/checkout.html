@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stardlune</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Navbar */
+        .navbar {
+            background-color: #343a40 !important; /* Warna latar belakang navbar */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important; /* Warna teks navbar */
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Warna teks link navbar */
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important; /* Warna teks link navbar saat hover */
+        }
+        .nav-item.active .nav-link {
+            border-bottom: 3px solid #007bff; /* Warna garis bawah yang dipilih (biru) */
+        }
+
+        .profile-icon {
+            width: 30px; /* Sesuaikan ukuran gambar */
+            height: auto;
+        }
+        
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .card-body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #343a40;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            width: 100%;
+            bottom: 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Stardlune</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:products' %}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:cart' %}">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">
+                            <img src="https://divedigital.id/wp-content/uploads/2021/10/1-min.png" alt="Profile" class="profile-icon">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Page Content -->
+    <div class="container mt-4">
+        <h1 class="mb-4">Checkout</h1>
+        <div class="row">
+            <!-- Order Summary -->
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- List of items in the order -->
+                        {% for item in items %}
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+                            </div>
+                            <div class="col-md-6">
+                                <h5>{{ item.product.name }}</h5>
+                                <p>{{ item.product.description }}</p>
+                                <p>Price: ${{ item.product.price }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Quantity: {{ item.quantity }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <!-- Total price -->
+                        <hr>
+                        <h5>Total Price: ${{ total_price }}</h5>
+                    </div>
+                </div>
+            </div>
+            <!-- Customer Information and Payment -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Form for customer information -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="shipping_address">Shipping Address:</label>
+                                <input type="text" class="form-control" id="shipping_address" name="shipping_address">
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping_city">City:</label>
+                                <input type="text" class="form-control" id="shipping_city" name="shipping_city">
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping_country">Country:</label>
+                                <input type="text" class="form-control" id="shipping_country" name="shipping_country">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Payment</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Form for payment -->
+                        <form>
+                            <div class="form-group">
+                                <label for="payment_method">Payment Method:</label>
+                                <select class="form-control" id="payment_method">
+                                    <option value="COD">Cash on Delivery</option>
+                                    <option value="Card">Credit/Debit Card</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Stardlune. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

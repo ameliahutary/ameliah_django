@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stardlune - Products</title>
+    <title>Stardlune</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
@@ -92,16 +92,16 @@
                         <a class="nav-link" href="/#/">Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="/products/">Products</a>
+                        <a class="nav-link" href="{% url 'accounts:products' %}">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart/">Cart</a>
+                        <a class="nav-link" href="{% url 'accounts:cart' %}">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login/">Login</a>
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profile/">
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">
                             <img src="https://divedigital.id/wp-content/uploads/2021/10/1-min.png" alt="Profile" class="profile-icon">
                         </a>
                     </li>
@@ -117,7 +117,9 @@
             {% for product in products %}
             <div class="col-lg-3">
                 <div class="card">
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <a href="{% url 'accounts:product_detail' product_id=product.id %}">
+                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description }}</p>
