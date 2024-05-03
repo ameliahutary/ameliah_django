@@ -13,8 +13,12 @@ class UserRegistrationForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['address', 'city', 'country']
-
+        fields = ['address', 'city', 'country', 'profile_picture']
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture']
+        
 class CheckoutForm(forms.Form):
     shipping_address = forms.CharField(max_length=100)
     shipping_city = forms.CharField(max_length=50)

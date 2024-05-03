@@ -43,6 +43,7 @@ class UserProfile(models.Model):
     address = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default.jpg')
     # Tambahkan atribut lain yang sesuai dengan kebutuhan halaman HTML profile.html
 
     def __str__(self):
