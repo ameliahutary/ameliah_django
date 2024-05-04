@@ -52,6 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'stardlune.urls'
+LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {

@@ -6,15 +6,30 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
 from .forms import ProfilePictureForm
+from django.contrib.auth import logout
+
 
 def index(request):
-    return render(request, 'home.html')
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
+    return render(request, 'home.html', {'user_profile': user_profile})
+
 
 def products(request):
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
     products = Product.objects.all()
-    return render(request, 'products.html', {'products': products})
+    return render(request, 'products.html', {'products': products, 'user_profile': user_profile})
 
-def product_detail(request, product_id):
+def product_detail(request, product_id):  
     product = Product.objects.get(id=product_id)
     return render(request, 'product_detail.html', {'product': product})
 
@@ -31,10 +46,12 @@ def profile(request):
 
 @login_required
 def cart(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        user_profile = None
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
 
     order, created = Order.objects.get_or_create(user=request.user, status='Pending')
     items = OrderItem.objects.filter(order=order)
@@ -42,13 +59,22 @@ def cart(request):
     # Ambil produk yang terkait dengan setiap OrderItem
     products = [item.product for item in items]
 
-    return render(request, 'cart.html', {'items': items, 'products': products, 'profile': user_profile})
+    # Hitung total harga
+    total_price = sum(item.product.price * item.quantity for item in items)
+
+    return render(request, 'cart.html', {'items': items, 'products': products, 'profile': user_profile, 'total_price': total_price})
 
 
 @login_required
 def checkout(request):
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
     # Implement checkout logic here
-    return render(request, 'checkout.html')
+    return render(request, 'checkout.html', {'checkout': checkout, 'user_profile': user_profile})
 
 @csrf_protect
 def user_login(request):
@@ -58,7 +84,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('accounts:index')  # Ganti 'accounts:index' dengan URL halaman setelah login
+            return redirect('accounts:index')  
         else:
             error = 'Invalid username or password'
             return render(request, 'login.html', {'error': error})
@@ -84,6 +110,7 @@ def user_profile(request):
 
     return render(request, 'profile.html', {'user_profile': user_profile})
 
+
 @login_required
 def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
@@ -92,3 +119,10 @@ def order_history(request):
 @login_required
 def some_view(request):
     return render(request, 'some_template.html', {'user': request.user})
+
+
+def logout_view(request):
+    # Lakukan logout pengguna
+    logout(request)
+    # Redirect pengguna ke halaman lain, misalnya halaman beranda
+    return redirect('accounts:index')

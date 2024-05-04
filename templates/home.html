@@ -34,6 +34,7 @@
             height: 30px;
             border-radius: 50%; /* Agar gambar menjadi lingkaran */
             margin-right: 5px; /* Jarak antara ikon profil dan nama pengguna */
+            object-fit: cover;
         }
 
         /* Carousel */
@@ -79,18 +80,20 @@
                         <a class="nav-link" href="/cart/">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login/">Login</a>
+                        <a class="nav-link" href="/register/">Sign Up</a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ user_profile.profile_picture.url }}" alt="" class="profile-icon">
+                                {% if user_profile %}
+                                    <img src="{{ user_profile.profile_picture.url }}" alt="" class="profile-icon">
+                                {% endif %}
                                 {{ user.username }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/profile/">Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                             </div>
                         </li>
                     {% else %}
