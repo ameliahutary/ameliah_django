@@ -40,6 +40,7 @@ def product_detail(request, product_id):
         except UserProfile.DoesNotExist:
             pass
     product = Product.objects.get(id=product_id)
+    photos = product.photos.all()
     reviews = ProductReview.objects.filter(product=product)
     return render(request, 'product_detail.html', {'product': product, 'user_profile': user_profile})
 

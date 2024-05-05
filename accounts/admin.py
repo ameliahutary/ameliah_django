@@ -1,13 +1,16 @@
 from django.contrib import admin
-from .models import Product, Order, OrderItem, UserProfile, ProductReview
+from .models import Product, Order, OrderItem, UserProfile, ProductReview, Photo
 
-# Register your models here.
+class PhotoInline(admin.TabularInline):  
+    model = Photo
+    extra = 3
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'stock', 'category')
     search_fields = ('name',)
     list_filter = ('category',)
+    inlines = [PhotoInline]
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
@@ -32,3 +35,8 @@ class ProductReviewAdmin(admin.ModelAdmin):
     list_display = ('product', 'user', 'rating', 'created_at')
     search_fields = ('product__name', 'user__username',)
     list_filter = ('product__category',)
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    pass
+
