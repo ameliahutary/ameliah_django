@@ -5,8 +5,12 @@ app_name = "accounts"
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
     path('products/', views.products, name='products'),
     path('products/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('products/<int:product_id>/add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('products/<int:product_id>/submit-review/', views.submit_product_review, name='submit_product_review'),
+    path('products/<int:product_id>/related-products/', views.related_products, name='related_products'),
     path('cart/', views.cart, name='cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('login/', views.user_login, name='login'),

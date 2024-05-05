@@ -47,7 +47,6 @@
             width: 350px; /* Ukuran untuk container gambar */
             height: 350px; /* Ukuran untuk container gambar */
             border-radius: 20px; /* Border radius untuk frame rounded rectangle */
-            
             overflow: hidden; /* Agar gambar tidak keluar dari container */
         }
         .product-image {
@@ -69,9 +68,59 @@
         .btn-primary {
             background-color: #007bff;
             border: none;
+            margin-right: 10px;
         }
         .btn-primary:hover {
             background-color: #0056b3;
+        }
+        .btn-outline-primary {
+            color: #007bff;
+            border: 2px solid #007bff;
+        }
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Product Reviews */
+        .product-reviews-container {
+            margin-top: 50px;
+        }
+        .review-item {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        .review-user {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .review-rating {
+            color: #ffc107; /* Warna bintang rating */
+            margin-bottom: 5px;
+        }
+        .review-text {
+            color: #333;
+        }
+
+        .separator {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .review-item {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
         }
 
         /* Footer */
@@ -108,7 +157,12 @@
                         <a class="nav-link" href="/products/">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart/">Cart</a>
+                        <a class="nav-link" href="/cart/">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                <path d="M0 0h1l2.693 10.773a2 2 0 0 0 1.916 1.393h7.382a2 2 0 0 0 1.915-1.392L16 1H4zm4.386 11a1 1 0 1 0 .976.814h6.276a1 1 0 1 0 .975-.815l-1-4a1 1 0 0 0-.975-.815H6.361a1 1 0 0 0-.976.815l-1 4z"/>
+                            </svg>
+                            Cart
+                        </a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
@@ -138,7 +192,7 @@
     </nav>
 
     <!-- Product Detail Section -->
-    <div class="container product-detail-container">
+    <div class="container product-detail-container box">
         <div class="row">
             <div class="col-md-6">
                 <div class="product-image-container">
@@ -150,10 +204,53 @@
                 <p class="product-price">Price: ${{ product.price }}</p>
                 <p class="product-description">{{ product.description }}</p>
                 <button class="btn btn-primary">Add to Cart</button>
+                <button class="btn btn-outline-primary">Add to Wishlist</button>
+                <!-- Add review form -->
+                <form method="post" action="{% url 'accounts:submit_product_review' product.id %}">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- Garis Pemisah -->
+    <div class="separator"></div>
+
+    <!-- Product Reviews Section -->
+    <div class="container product-reviews-container box">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Product Reviews</h4>
+                <hr>
+                <div class="review-item">
+                    {% for review in product.productreview_set.all %}
+                        <div class="review-user">@{{ review.user }}</div>
+                        <div class="review-rating">
+                            {% for i in "xxxxx" %}
+                                {% if forloop.counter0 < review.rating %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                        <path d="M7.819.644a.5.5 0 0 1 .363.858l-3.097 3.014.729 4.253a.5.5 0 0 1-.725.527L1.57 9.28.314 13.042a.5.5 0 0 1-.914-.342l.689-4.033L.117 5.214a.5.5 0 0 1 .288-.538l3.332-.49L7.456.805a.5.5 0 0 1 .363-.162z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                        <path d="M6.73.305a.5.5 0 0 1 .54.305l1.382 3.53 3.91.286a.5.5 0 0 1 .278.858l-3.007 2.53.894 3.802a.5.5 0 0 1-.766.53L8 11.198l-3.72 2.24a.5.5 0 0 1-.766-.53l.894-3.802-3.007-2.53a.5.5 0 0 1 .278-.858l3.91-.286 1.382-3.53a.5.5 0 0 1 .464-.336z"/>
+                                    </svg>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="review-text">{{ review.review }}</div>
+                        <hr>
+                    {% empty %}
+                        <p>No reviews yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Garis Pemisah -->
+    <div class="separator"></div>
     <!-- Footer -->
     <footer>
         <div class="container">

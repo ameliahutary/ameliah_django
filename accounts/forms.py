@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
+from .models import ProductReview
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
@@ -24,3 +25,8 @@ class CheckoutForm(forms.Form):
     shipping_city = forms.CharField(max_length=50)
     shipping_country = forms.CharField(max_length=50)
     payment_method = forms.ChoiceField(choices=[('COD', 'Cash on Delivery'), ('Card', 'Credit/Debit Card')])
+
+class ProductReviewForm(forms.ModelForm):
+    class Meta:
+        model = ProductReview
+        fields = ['rating', 'review']

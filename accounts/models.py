@@ -14,6 +14,16 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class ProductReview(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(1, '1 Star'), (2, '2 Stars'), (3, '3 Stars'), (4, '4 Stars'), (5, '5 Stars')])
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name} - {self.rating} Stars"
+
 class Order(models.Model):
     STATUS_CHOICES = (
         ('Pending', 'Pending'),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Order, OrderItem, UserProfile
+from .models import Product, Order, OrderItem, UserProfile, ProductReview
 
 # Register your models here.
 
@@ -26,3 +26,9 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'address', 'city', 'country')
     search_fields = ('user__username', 'address')
     list_filter = ('country',)
+
+@admin.register(ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'created_at')
+    search_fields = ('product__name', 'user__username',)
+    list_filter = ('product__category',)

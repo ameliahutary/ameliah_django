@@ -85,7 +85,12 @@
                         <a class="nav-link" href="/products/">Products</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="/cart/">Cart</a>
+                        <a class="nav-link" href="/cart/">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                <path d="M0 0h1l2.693 10.773a2 2 0 0 0 1.916 1.393h7.382a2 2 0 0 0 1.915-1.392L16 1H4zm4.386 11a1 1 0 1 0 .976.814h6.276a1 1 0 1 0 .975-.815l-1-4a1 1 0 0 0-.975-.815H6.361a1 1 0 0 0-.976.815l-1 4z"/>
+                            </svg>
+                            Cart
+                        </a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">

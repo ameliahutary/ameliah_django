@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from .models import Product, Order, OrderItem, UserProfile
+from .models import Product, ProductReview, Order, OrderItem, UserProfile
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
@@ -17,6 +17,9 @@ def index(request):
         except UserProfile.DoesNotExist:
             pass
     return render(request, 'home.html', {'user_profile': user_profile})
+
+def about(request):
+    return render(request, 'about.html')
 
 
 def products(request):
@@ -37,7 +40,23 @@ def product_detail(request, product_id):
         except UserProfile.DoesNotExist:
             pass
     product = Product.objects.get(id=product_id)
+    reviews = ProductReview.objects.filter(product=product)
     return render(request, 'product_detail.html', {'product': product, 'user_profile': user_profile})
+
+
+
+def add_to_wishlist(request, product_id):
+    # Implementasi logika untuk menambahkan produk ke daftar keinginan
+    pass
+
+def submit_product_review(request, product_id):
+    # Implementasi logika untuk menyimpan ulasan produk baru
+    pass
+
+def related_products(request, product_id):
+    # Implementasi logika untuk menampilkan produk terkait
+    pass
+
 
 def profile(request):
     if request.method == 'POST':
