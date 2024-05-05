@@ -30,8 +30,14 @@ def products(request):
     return render(request, 'products.html', {'products': products, 'user_profile': user_profile})
 
 def product_detail(request, product_id):  
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
     product = Product.objects.get(id=product_id)
-    return render(request, 'product_detail.html', {'product': product})
+    return render(request, 'product_detail.html', {'product': product, 'user_profile': user_profile})
 
 def profile(request):
     if request.method == 'POST':
@@ -52,7 +58,6 @@ def cart(request):
             user_profile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
             pass
-
     order, created = Order.objects.get_or_create(user=request.user, status='Pending')
     items = OrderItem.objects.filter(order=order)
 
@@ -62,7 +67,7 @@ def cart(request):
     # Hitung total harga
     total_price = sum(item.product.price * item.quantity for item in items)
 
-    return render(request, 'cart.html', {'items': items, 'products': products, 'profile': user_profile, 'total_price': total_price})
+    return render(request, 'cart.html', {'items': items, 'products': products, 'user_profile': user_profile, 'total_price': total_price})
 
 
 @login_required
