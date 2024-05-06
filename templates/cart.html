@@ -7,6 +7,8 @@
     <title>Stardlune</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Custom CSS -->
     <style>
         /* Navbar */
@@ -39,8 +41,7 @@
 
         /* Gradient Custom */
         .gradient-custom {
-            background: #ffffff; /* fallback for old browsers */
-            background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255)); /* Warna gradien */
+            background: linear-gradient(to right, #ffffff, #ffffff); /* Warna gradien */
             height: 100%;
         }
 
@@ -48,7 +49,6 @@
         .cart-item {
             border-bottom: 1px solid #dee2e6;
             padding: 10px 0;
-            
         }
         .cart-item:last-child {
             border-bottom: none;
@@ -56,7 +56,6 @@
         .cart-img {
             max-width: 100px;
             height: auto;
-            
         }
 
         /* Footer */
@@ -139,14 +138,15 @@
                         <div class="card-body">
                             <!-- Cart Items -->
                             {% for item in items %}
-                            <div class="row">
+                            <div class="row cart-item">
                                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                     <!-- Image -->
-                                    <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                        <img src="{{ item.product.image.url }}" class="w-100" alt="{{ item.product.name }}" />
-                                        <a href="#!">
-                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                        </a>
+                                    <div class="bg-image hover-overlay hover-zoom ripple rounded">
+                                        {% if item.product.photos.first %}
+                                            <img src="{{ item.product.photos.first.image.url }}" class="w-100 cart-img" alt="{{ item.product.name }}" />
+                                        {% else %}
+                                            <img src="#" class="w-100 cart-img" alt="No Image" />
+                                        {% endif %}
                                     </div>
                                     <!-- Image -->
                                 </div>
@@ -155,29 +155,25 @@
                                     <!-- Data -->
                                     <p><strong>{{ item.product.name }}</strong></p>
                                     <p>{{ item.product.description }}</p>
-
-                                    <button type="button" class="btn btn-primary btn-sm me-1 mb-2" title="Remove item">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm mb-2" title="Move to the wish list">
-                                        <i class="fas fa-heart"></i>
-                                    </button>
+                                    <form method="POST" action="{% url 'accounts:remove_from_cart' item.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm mb-2" title="Remove item">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                     <!-- Data -->
                                 </div>
 
                                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                                     <!-- Quantity -->
                                     <div class="d-flex mb-4" style="max-width: 300px">
-                                        <button class="btn btn-primary px-3 me-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                        <button class="btn btn-primary me-2" onclick="decrementQuantity(this)">
                                             <i class="fas fa-minus"></i>
                                         </button>
 
-                                        <div class="form-outline">
-                                            <input id="form1" min="0" name="quantity" value="{{ item.quantity }}" type="number" class="form-control" />
-                                            <label class="form-label" for="form1">Quantity</label>
-                                        </div>
+                                        <input min="0" name="quantity" value="{{ item.quantity }}" type="number" class="form-control quantity-input" />
 
-                                        <button class="btn btn-primary px-3 ms-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                        <button class="btn btn-primary ms-2" onclick="incrementQuantity(this)">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -235,7 +231,6 @@
                             </ul>
 
                             <button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location.href='/checkout/'">Go to checkout</button>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -254,5 +249,21 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+        function incrementQuantity(button) {
+            var input = button.parentNode.querySelector('input[type=number]');
+            var newValue = parseInt(input.value) + 1;
+            input.value = newValue;
+        }
+
+        function decrementQuantity(button) {
+            var input = button.parentNode.querySelector('input[type=number]');
+            var newValue = parseInt(input.value) - 1;
+            if (newValue >= 0) {
+                input.value = newValue;
+            }
+        }
+    </script>
 </body>
 </html>

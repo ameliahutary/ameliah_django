@@ -103,6 +103,12 @@ def add_to_cart(request, product_id):
 
     return redirect('accounts:cart')
 
+@login_required
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(OrderItem, id=item_id)
+    item.delete()
+    return redirect('accounts:cart')
+
 
 @login_required
 def checkout(request):
