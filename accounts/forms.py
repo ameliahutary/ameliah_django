@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
-from .models import ProductReview
+from .models import ProductReview, Photo
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
@@ -30,5 +30,3 @@ class ProductReviewForm(forms.ModelForm):
     class Meta:
         model = ProductReview
         fields = ['rating', 'review']
-
-        

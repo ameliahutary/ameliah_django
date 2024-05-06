@@ -224,11 +224,7 @@
                 <p class="product-description">{{ product.description }}</p>
                 <button class="btn btn-primary">Add to Cart</button>
                 <button class="btn btn-outline-primary">Add to Wishlist</button>
-                <!-- Add review form -->
-                <form method="post" action="{% url 'accounts:submit_product_review' product.id %}">
-                    {% csrf_token %}
-                    {{ review_form.as_p }}
-                </form>
+                <!-- Formulir untuk mengunggah foto produk -->
             </div>
         </div>
     </div>

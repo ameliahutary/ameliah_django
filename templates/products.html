@@ -133,7 +133,7 @@
         </div>
     </nav>
 
-    <!-- Product Section -->
+   <!-- Product Section -->
     <div class="container mt-4">
         <h2 class="text-center mb-4">Our Products</h2> <!-- Add this line for the title -->
         <div class="row">
@@ -141,7 +141,11 @@
             <div class="col-lg-3">
                 <div class="card">
                     <a href="{% url 'accounts:product_detail' product_id=product.id %}">
-                        <img class="card-img-top" src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% if product.photos.first %}
+                            <img class="card-img-top" src="{{ product.photos.first.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img class="card-img-top" src="#" alt="No Image">
+                        {% endif %}
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
@@ -153,6 +157,7 @@
             {% endfor %}
         </div>
     </div>
+
 
 
     <!-- Footer -->
