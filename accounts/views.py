@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegistrationForm
 from .forms import ProfilePictureForm
 from django.contrib.auth import logout
+from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -88,6 +89,19 @@ def cart(request):
     total_price = sum(item.product.price * item.quantity for item in items)
 
     return render(request, 'cart.html', {'items': items, 'products': products, 'user_profile': user_profile, 'total_price': total_price})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    order, created = Order.objects.get_or_create(user=request.user, status='Pending')
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    # Jika order item sudah ada dalam keranjang, tambahkan satu ke jumlahnya
+    if not created:
+        order_item.quantity += 1
+        order_item.save()
+
+    return redirect('accounts:cart')
 
 
 @login_required

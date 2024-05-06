@@ -150,7 +150,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">Price: ${{ product.price }}</p>
-                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                        <a href="{% url 'accounts:add_to_cart' product_id=product.id %}" class="btn btn-primary">Add to Cart</a>
                     </div>
                 </div>
             </div>

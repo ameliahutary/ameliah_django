@@ -222,7 +222,7 @@
                 <h2 class="product-name">{{ product.name }}</h2>
                 <p class="product-price">Price: ${{ product.price }}</p>
                 <p class="product-description">{{ product.description }}</p>
-                <button class="btn btn-primary">Add to Cart</button>
+                <a href="{% url 'accounts:add_to_cart' product_id=product.id %}" class="btn btn-primary">Add to Cart</a>
                 <button class="btn btn-outline-primary">Add to Wishlist</button>
                 <!-- Formulir untuk mengunggah foto produk -->
             </div>
