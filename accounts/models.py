@@ -4,6 +4,7 @@ from django.db.models.signals import pre_delete
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from PIL import Image
 
 
 class Product(models.Model):
@@ -20,8 +21,26 @@ class Photo(models.Model):
     product = models.ForeignKey(Product, related_name='photos', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_photos/', null=True, blank=True)
 
-    def __str__(self):
-        return f"Photo for {self.product.name}"
+    def save(self, *args, **kwargs):
+        super(Photo, self).save(*args, **kwargs)
+
+        if self.image:
+            img = Image.open(self.image.path)
+            width, height = img.size
+
+            # Menentukan dimensi persegi yang diinginkan
+            square_size = min(width, height)
+
+            # Memotong gambar menjadi persegi
+            left = (width - square_size) / 2
+            top = (height - square_size) / 2
+            right = (width + square_size) / 2
+            bottom = (height + square_size) / 2
+
+            img = img.crop((left, top, right, bottom))
+
+            # Menyimpan gambar yang telah dipotong
+            img.save(self.image.path)
 
 @receiver(pre_delete, sender=Photo)
 def delete_photo_file(sender, instance, **kwargs):
