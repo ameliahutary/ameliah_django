@@ -12,7 +12,7 @@ video.
 
 ### update (8 May 2024)
 #### admin
-![Screenshot Admin](https://github.com/ameliahutary/ameliah_django/blob/main/screenshot/update%20(8May2024)/Home.png)
+![Screenshot Admin](https://github.com/ameliahutary/ameliah_django/blob/main/screenshot/update%20(8May2024)/Admin.png)
 #### login
 ![Screenshot Login](https://github.com/ameliahutary/ameliah_django/blob/main/screenshot/update%20(8May2024)/Login.png)
 #### register
