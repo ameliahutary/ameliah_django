@@ -92,6 +92,18 @@ def cart(request):
 
     return render(request, 'cart.html', {'items': items, 'products': products, 'user_profile': user_profile, 'total_price': total_price})
 
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    order, created = Order.objects.get_or_create(user=request.user, status='Pending')
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    # Jika order item sudah ada dalam keranjang, tambahkan satu ke jumlahnya
+    if not created:
+        order_item.quantity += 1
+        order_item.save()
+
+    return redirect('accounts:cart')
 
 @login_required
 def remove_from_cart(request, item_id):
@@ -128,17 +140,12 @@ def checkout(request):
                 # Kurangi stok produk
                 item.product.stock -= item.quantity  
                 item.product.save()
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity
-                )
 
         # Tampilkan pesan sukses sebagai pop-up
         messages.success(request, 'Your order has been successfully placed!')
 
         # Redirect kembali ke halaman checkout
-        return redirect('checkout')  
+        return redirect('accounts:checkout')  
 
     # Jika bukan POST request, lanjutkan seperti biasa
     user_profile = None
@@ -153,19 +160,6 @@ def checkout(request):
     total_price = sum(item.product.price * item.quantity for item in order_items)
     return render(request, 'checkout.html', {'order_items': order_items, 'total_price': total_price, 'user_profile': user_profile})
 
-
-@login_required
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    order, created = Order.objects.get_or_create(user=request.user, status='Pending')
-    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
-
-    # Jika order item sudah ada dalam keranjang, tambahkan satu ke jumlahnya
-    if not created:
-        order_item.quantity += 1
-        order_item.save()
-
-    return redirect('accounts:cart')
 
 
 @csrf_protect
