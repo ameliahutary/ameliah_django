@@ -1,7 +1,6 @@
 import os
 from django.db import models
-from django.db.models.signals import pre_delete
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from PIL import Image
@@ -42,6 +41,13 @@ class Photo(models.Model):
             # Menyimpan gambar yang telah dipotong
             img.save(self.image.path)
 
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # Other fields as needed
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
+
 @receiver(pre_delete, sender=Photo)
 def delete_photo_file(sender, instance, **kwargs):
     # Hapus file gambar dari sistem file saat objek Photo dihapus
@@ -65,11 +71,16 @@ class Order(models.Model):
         ('Processing', 'Processing'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
     )
 
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     date_ordered = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    shipping_address = models.CharField(max_length=100, blank=True)
+    shipping_city = models.CharField(max_length=50, blank=True)
+    shipping_country = models.CharField(max_length=50, blank=True)
+    payment_method = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return f"Order {self.id}"
@@ -104,3 +115,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+# Sinyal untuk membuat Cart saat pengguna baru mendaftar
+@receiver(post_save, sender=User)
+def create_user_cart(sender, instance, created, **kwargs):
+    if created:
+        Cart.objects.create(user=instance)

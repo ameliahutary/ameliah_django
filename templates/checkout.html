@@ -121,6 +121,13 @@
 
     <!-- Checkout Page Content -->
     <div class="container mt-4">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}    
         <h1 class="mb-4">Checkout</h1>
         <div class="row">
             <!-- Order Summary -->
@@ -131,10 +138,10 @@
                     </div>
                     <div class="card-body">
                         <!-- List of items in the order -->
-                        {% for item in items %}
+                        {% for item in order_items %}
                         <div class="row mb-3">
                             <div class="col-md-3">
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+                                <img src="{{ item.product.photos.first.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
                             </div>
                             <div class="col-md-6">
                                 <h5>{{ item.product.name }}</h5>
@@ -174,30 +181,22 @@
                                 <label for="shipping_country">Country:</label>
                                 <input type="text" class="form-control" id="shipping_country" name="shipping_country">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Payment</h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- Form for payment -->
-                        <form>
+                            <!-- Payment Method -->
                             <div class="form-group">
                                 <label for="payment_method">Payment Method:</label>
-                                <select class="form-control" id="payment_method">
+                                <select class="form-control" id="payment_method" name="payment_method">
                                     <option value="COD">Cash on Delivery</option>
                                     <option value="Card">Credit/Debit Card</option>
                                 </select>
                             </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Checkout</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer>

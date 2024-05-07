@@ -8,6 +8,8 @@ from .forms import UserRegistrationForm
 from .forms import ProfilePictureForm
 from django.contrib.auth import logout
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
+
 
 
 def index(request):
@@ -90,6 +92,68 @@ def cart(request):
 
     return render(request, 'cart.html', {'items': items, 'products': products, 'user_profile': user_profile, 'total_price': total_price})
 
+
+@login_required
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(OrderItem, id=item_id)
+    item.delete()
+    return redirect('accounts:cart')
+
+
+@login_required
+def checkout(request):
+    if request.method == 'POST':
+        # Ambil data yang dikirimkan melalui form
+        shipping_address = request.POST.get('shipping_address')
+        shipping_city = request.POST.get('shipping_city')
+        shipping_country = request.POST.get('shipping_country')
+        payment_method = request.POST.get('payment_method')  # Tambahkan ini
+
+        # Buat pesanan baru
+        order, created = Order.objects.get_or_create(user=request.user, status='Pending')
+        order.shipping_address = shipping_address
+        order.shipping_city = shipping_city
+        order.shipping_country = shipping_country
+        order.payment_method = payment_method  # Tambahkan ini
+        order.save()
+
+        # Tandai item dalam keranjang sebagai sudah dipesan
+        for item in order.items.all():
+            if item.quantity > item.product.stock:
+                # Jika jumlah item melebihi stok yang tersedia
+                messages.error(request, f"Insufficient stock for {item.product.name}.")
+                # Redirect kembali ke halaman keranjang
+                return redirect('accounts:cart')
+            else:
+                # Kurangi stok produk
+                item.product.stock -= item.quantity  
+                item.product.save()
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.product,
+                    quantity=item.quantity
+                )
+
+        # Tampilkan pesan sukses sebagai pop-up
+        messages.success(request, 'Your order has been successfully placed!')
+
+        # Redirect kembali ke halaman checkout
+        return redirect('checkout')  
+
+    # Jika bukan POST request, lanjutkan seperti biasa
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
+    order, created = Order.objects.get_or_create(user=request.user, status='Pending')
+    order_items = order.items.all()
+    # Hitung total harga
+    total_price = sum(item.product.price * item.quantity for item in order_items)
+    return render(request, 'checkout.html', {'order_items': order_items, 'total_price': total_price, 'user_profile': user_profile})
+
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -103,23 +167,6 @@ def add_to_cart(request, product_id):
 
     return redirect('accounts:cart')
 
-@login_required
-def remove_from_cart(request, item_id):
-    item = get_object_or_404(OrderItem, id=item_id)
-    item.delete()
-    return redirect('accounts:cart')
-
-
-@login_required
-def checkout(request):
-    user_profile = None
-    if request.user.is_authenticated:
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-        except UserProfile.DoesNotExist:
-            pass
-    # Implement checkout logic here
-    return render(request, 'checkout.html', {'checkout': checkout, 'user_profile': user_profile})
 
 @csrf_protect
 def user_login(request):
