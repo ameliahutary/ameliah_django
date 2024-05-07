@@ -1,37 +1,187 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Stardlune</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/#/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products/">Products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/cart/">Cart</a>
-                </li>
-                {% if user.is_authenticated %}
-                <!-- Navigasi untuk pengguna yang sudah login -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile/">
-                        <img src="{{ user.profile.image.url }}" alt="Profile" class="profile-icon">
-                        {{ user.username }}
-                    </a>
-                </li>
-                {% else %}
-                <!-- Navigasi untuk pengguna yang belum login -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/login/">Login</a>
-                </li>
-                {% endif %}
-            </ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Navbar */
+        .navbar {
+            background-color: #343a40 !important; /* Warna latar belakang navbar */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important; /* Warna teks navbar */
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important; /* Warna teks link navbar */
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important; /* Warna teks link navbar saat hover */
+        }
+        .nav-item.active .nav-link {
+            border-bottom: 3px solid #007bff; /* Warna garis bawah yang dipilih (biru) */
+        }
+        .rounded-pill {
+            border-radius: 50px;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
+
+        /* Profile Icon */
+        .profile-icon {
+            width: 30px; /* Sesuaikan ukuran gambar */
+            height: 30px;
+            border-radius: 50%; /* Agar gambar menjadi lingkaran */
+            margin-right: 5px; /* Jarak antara ikon profil dan nama pengguna */
+            object-fit: cover;
+        }
+        
+        /* Your custom styles */
+        .profile-picture-container {
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+        }
+
+        .profile-picture {
+            width: 100%;
+            height: auto;
+        }
+        /* Footer */
+        footer {
+            background-color: #343a40;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            width: 100%;
+            bottom: 0;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Stardlune</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products/">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart/">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                <path d="M0 0h1l2.693 10.773a2 2 0 0 0 1.916 1.393h7.382a2 2 0 0 0 1.915-1.392L16 1H4zm4.386 11a1 1 0 1 0 .976.814h6.276a1 1 0 1 0 .975-.815l-1-4a1 1 0 0 0-.975-.815H6.361a1 1 0 0 0-.976.815l-1 4z"/>
+                            </svg>
+                            Cart
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% if user_profile %}
+                                    <img src="{{ user_profile.profile_picture.url }}" alt="" class="profile-icon">
+                                {% endif %}
+                                {{ user.username }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item active" href="/profile/">Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-primary rounded-pill" href="/login/">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-primary rounded-pill" href="/register/">Sign Up</a>
+                        </li>
+                    {% endif %}
+                        
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">User Profile</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="text-center profile-picture-container">
+                            <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+                        </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Username</th>
+                                    <td>{{ request.user.username }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Address</th>
+                                    <td>{{ user_profile.address }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">City</th>
+                                    <td>{{ user_profile.city }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Country</th>
+                                    <td>{{ user_profile.country }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Email</th>
+                                    <td>{{ request.user.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Joined</th>
+                                    <td>{{ request.user.date_joined }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <a href="{% url 'accounts:logout' %}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Stardlune. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

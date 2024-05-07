@@ -27,7 +27,10 @@
         .nav-item.active .nav-link {
             border-bottom: 3px solid #007bff; /* Warna garis bawah yang dipilih (biru) */
         }
-
+        .rounded-pill {
+            border-radius: 50px;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
         /* Profile Icon */
         .profile-icon {
             width: 30px; /* Sesuaikan ukuran gambar */
@@ -36,7 +39,7 @@
             margin-right: 5px; /* Jarak antara ikon profil dan nama pengguna */
             object-fit: cover;
         }
-
+        
         /* Product Cards */
         .card {
             margin-bottom: 20px;
@@ -122,10 +125,10 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/login/">Login</a>
+                            <a class="nav-link btn btn-primary rounded-pill" href="/login/">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/register/">Sign Up</a>
+                            <a class="nav-link btn btn-outline-primary rounded-pill" href="/register/">Sign Up</a>
                         </li>
                     {% endif %}
                 </ul>
